@@ -19,15 +19,18 @@ for i in 1..3 do
     posts_list = doc.css(".column-main")
     posts_list.each do |post|
       data = []
-      company = post.css(".projects-index-single .project-bottom .company-name h3")[0].inner_text
+      entrycount = post.css(".project-tags .entry-count .count")[0].inner_text
+      company = post.css(".projects-index-single .project-bottom .company-name")[0].inner_text
       title = post.css(".projects-index-single .project-title")[0].inner_text
-      link = post.css(".projects-index-single .project-title a")[0][:href]
+      link = "https://www.wantedly.com"+post.css(".projects-index-single .project-title a")[0][:href]
 
-      data.push(company.tosjis,title.tosjis,link.tosjis)
+      data.push("entry:#{entrycount.tosjis}")
+      data.push("company:#{company.tosjis}")
+      data.push("title:#{title.tosjis}")
+      data.push("link:#{link.tosjis}")
       lists.push(data)
     end
-
-  CSV.open("wantedly.csv", "w") do |csv|
+  CSV.open("wantedly.csv", "a") do |csv|
     lists.each do |r|
       csv << r
     end
@@ -51,7 +54,7 @@ end
 #     posts_list = doc.css(".column-main")
 #     posts_list.each do |post|
 #       data = []
-#       company = post.css(".projects-index-single .project-bottom .company-name h3")[0].inner_text
+#       company = post.css(".projects-index-single .project-bottom .company-name")[0].inner_text
 #       title = post.css(".projects-index-single .project-title")[0].inner_text
 #       link = post.css(".projects-index-single .project-title a")[0][:href]
 
